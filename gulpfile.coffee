@@ -24,7 +24,7 @@ gulp.task 'coffee', ->
     .pipe gulp.dest('./dist/')
 
   gulp
-    .src('./src/bin/closeheat.coffee')
+    .src('./src/bin/builder.coffee')
     .pipe(coffee(bare: true)
     .on('error', gutil.log))
     .pipe(insert.prepend('#!/usr/bin/env node\n\n'))

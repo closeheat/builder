@@ -1,21 +1,15 @@
 program = require 'commander'
-Creator = require '../creator'
+Core = require '../core'
 
 program
   .version('0.0.1')
   .usage('<keywords>')
 
 program
-  .command('create [name]')
-  .alias('new')
-  .description('creates a new app with clean setup and directory structure')
-  .action (name) ->
-    new Creator().create(name)
-
-program
-  .command('server')
-  .action ->
-    new Server().run()
+  .command('build [source] [dist]')
+  .description('build dist from source')
+  .action (source, dist) ->
+    new Core().build(source, dist)
 
 program.parse(process.argv)
 
