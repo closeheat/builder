@@ -1,0 +1,44 @@
+{
+  "name": "closeheat-builder",
+  "version": "0.0.1",
+  "author": "Justas Palumickas <jpalumickas@gmail.com>",
+  "contributors": [
+    "Domas Bitvinskas <domas.bitvinskas@me.com>"
+  ],
+  "description": "A builder for closeheat",
+  "main": "dist/core.js",
+  "bin": {
+    "closeheat-builder": "dist/bin/builder.js"
+  },
+  "homepage": "https://github.com/closeheat/builder",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/closeheat/builder.git"
+  },
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "commander": "^2.6.0",
+    "lodash": "^3.1.0",
+    "request": "^2.53.0"
+  },
+  "keywords": [
+    "closeheat",
+    "builder"
+  ],
+  "devDependencies": {
+    "coffee-script": "^1.8.0",
+    "fs": "^0.0.2",
+    "groc": "^0.7.0",
+    "gulp": "^3.8.10",
+    "gulp-coffee": "2.2.0",
+    "gulp-header": "^1.2.2",
+    "gulp-insert": "^0.4.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-replace": "^0.5.0",
+    "gulp-shell": "^0.2.11",
+    "gulp-uglify": "^1.0.2",
+    "gulp-util": "^3.0.1",
+    "gulp-watch": "^3.0.0"
+  }
+}
