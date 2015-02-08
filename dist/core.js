@@ -15,7 +15,7 @@ sass = require('gulp-sass');
 module.exports = Core = (function() {
   function Core() {}
 
-  Core.prototype.build = function(src, dist) {
+  Core.build = function(src, dist) {
     gulp.src(path.join(src, '/**/*.coffee')).pipe(coffee({
       bare: true
     }).on('error', gutil.log)).pipe(gulp.dest(path.join(dist)));

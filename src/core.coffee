@@ -7,7 +7,7 @@ sass = require 'gulp-sass'
 
 module.exports =
 class Core
-  build: (src, dist) ->
+  @build: (src, dist) ->
     gulp
       .src(path.join(src, '/**/*.coffee'))
       .pipe(coffee(bare: true)
