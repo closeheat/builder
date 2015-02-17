@@ -4,8 +4,6 @@ coffee = require 'gulp-coffee'
 path = require 'path'
 jade = require 'gulp-jade'
 sass = require 'gulp-sass'
-Orchestrator = require('orchestrator')
-orchestrator = new Orchestrator()
 callback = require 'gulp-callback'
 Q = require('q')
 
