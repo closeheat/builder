@@ -1,4 +1,4 @@
-var Core, Orchestrator, Q, callback, coffee, gulp, gutil, jade, orchestrator, path, sass;
+var Core, Q, callback, coffee, gulp, gutil, jade, path, sass;
 
 gulp = require('gulp');
 
@@ -11,10 +11,6 @@ path = require('path');
 jade = require('gulp-jade');
 
 sass = require('gulp-sass');
-
-Orchestrator = require('orchestrator');
-
-orchestrator = new Orchestrator();
 
 callback = require('gulp-callback');
 
