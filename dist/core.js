@@ -1,4 +1,4 @@
-var Core, Q, callback, coffee, gulp, gutil, jade, path, sass;
+var Core, Promise, callback, coffee, gulp, gutil, jade, path, sass, _;
 
 gulp = require('gulp');
 
@@ -14,40 +14,41 @@ sass = require('gulp-sass');
 
 callback = require('gulp-callback');
 
-Q = require('q');
+Promise = require('bluebird');
+
+_ = require('lodash');
 
 module.exports = Core = (function() {
   function Core() {}
 
   Core.build = function(src, dist) {
-    var deferredCoffee, deferredJade, deferredSCSS, deferredTransfer;
-    deferredCoffee = Q.defer();
-    deferredJade = Q.defer();
-    deferredSCSS = Q.defer();
-    deferredTransfer = Q.defer();
-    this.buildCoffee(src, dist, deferredCoffee);
-    this.buildJade(src, dist, deferredJade);
-    this.buildSCSS(src, dist, deferredSCSS);
-    this.transferOther(src, dist, deferredTransfer);
-    return Q.when(deferredCoffee.promise, deferredJade.promise, deferredSCSS.promise, deferredTransfer.promise);
+    return Promise.all([this.buildCoffee(src, dist), this.buildJade(src, dist), this.buildSCSS(src, dist), this.transferOther(src, dist)]);
   };
 
-  Core.buildCoffee = function(src, dist, promise) {
-    return gulp.src(path.join(src, '/**/*.coffee')).pipe(coffee({
-      bare: true
-    }).on('error', gutil.log)).pipe(gulp.dest(path.join(dist))).pipe(callback(promise.resolve));
+  Core.buildCoffee = function(src, dist) {
+    return new Promise(function(resolve, reject) {
+      return gulp.src(path.join(src, '/**/*.coffee')).pipe(coffee({
+        bare: true
+      }).on('error', reject)).pipe(gulp.dest(path.join(dist))).on('error', reject).on('end', resolve);
+    });
   };
 
-  Core.buildJade = function(src, dist, promise) {
-    return gulp.src(path.join(src, '/**/*.jade')).pipe(jade().on('error', gutil.log)).pipe(gulp.dest(path.join(dist))).pipe(callback(promise.resolve));
+  Core.buildJade = function(src, dist, _start) {
+    return new Promise(function(resolve, reject) {
+      return gulp.src(path.join(src, '/**/*.jade')).pipe(jade().on('error', reject)).pipe(gulp.dest(path.join(dist))).on('error', reject).on('end', resolve);
+    });
   };
 
-  Core.buildSCSS = function(src, dist, promise) {
-    return gulp.src(path.join(src, '/**/*.scss')).pipe(sass().on('error', gutil.log)).pipe(gulp.dest(path.join(dist))).pipe(callback(promise.resolve));
+  Core.buildSCSS = function(src, dist, _start) {
+    return new Promise(function(resolve, reject) {
+      return gulp.src(path.join(src, '/**/*.scss')).pipe(sass().on('error', reject)).pipe(gulp.dest(path.join(dist))).on('error', reject).on('end', resolve);
+    });
   };
 
-  Core.transferOther = function(src, dist, promise) {
-    return gulp.src([path.join(src, '/**/*'), "!" + (path.join(src, '/**/*.coffee')), "!" + (path.join(src, '/**/*.jade')), "!" + (path.join(src, '/**/*.scss'))]).pipe(gulp.dest(path.join(dist))).pipe(callback(promise.resolve));
+  Core.transferOther = function(src, dist, _start) {
+    return new Promise(function(resolve, reject) {
+      return gulp.src([path.join(src, '/**/*'), "!" + (path.join(src, '/**/*.coffee')), "!" + (path.join(src, '/**/*.jade')), "!" + (path.join(src, '/**/*.scss'))]).pipe(gulp.dest(path.join(dist))).on('error', reject).on('end', resolve);
+    });
   };
 
   return Core;

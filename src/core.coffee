@@ -5,59 +5,55 @@ path = require 'path'
 jade = require 'gulp-jade'
 sass = require 'gulp-sass'
 callback = require 'gulp-callback'
-Q = require('q')
+Promise = require 'bluebird'
+_ = require 'lodash'
 
 module.exports =
 class Core
   @build: (src, dist) ->
-    deferredCoffee = Q.defer()
-    deferredJade = Q.defer()
-    deferredSCSS = Q.defer()
-    deferredTransfer = Q.defer()
+    Promise.all([
+      @buildCoffee(src, dist)
+      @buildJade(src, dist)
+      @buildSCSS(src, dist)
+      @transferOther(src, dist)
+    ])
 
-    @buildCoffee(src, dist, deferredCoffee)
-    @buildJade(src, dist, deferredJade)
-    @buildSCSS(src, dist, deferredSCSS)
-    @transferOther(src, dist, deferredTransfer)
+  @buildCoffee: (src, dist) ->
+    new Promise (resolve, reject) ->
+      gulp
+        .src(path.join(src, '/**/*.coffee'))
+        .pipe(coffee(bare: true).on('error', reject))
+        .pipe(gulp.dest(path.join(dist)))
+        .on('error', reject)
+        .on('end', resolve)
 
-    Q.when(
-      deferredCoffee.promise,
-      deferredJade.promise,
-      deferredSCSS.promise,
-      deferredTransfer.promise
-    )
+  @buildJade: (src, dist, _start) ->
+    new Promise (resolve, reject) ->
+      gulp
+        .src(path.join(src, '/**/*.jade'))
+        .pipe(jade().on('error', reject))
+        .pipe(gulp.dest(path.join(dist)))
+        .on('error', reject)
+        .on('end', resolve)
 
-  @buildCoffee: (src, dist, promise) ->
-    gulp
-      .src(path.join(src, '/**/*.coffee'))
-      .pipe(coffee(bare: true)
-      .on('error', gutil.log))
-      .pipe(gulp.dest(path.join(dist)))
-      .pipe(callback(promise.resolve))
+  @buildSCSS: (src, dist, _start) ->
+    new Promise (resolve, reject) ->
+      gulp
+        .src(path.join(src, '/**/*.scss'))
+        .pipe(sass().on('error', reject))
+        .pipe(gulp.dest(path.join(dist)))
+        .on('error', reject)
+        .on('end', resolve)
 
-  @buildJade: (src, dist, promise) ->
-    gulp
-      .src(path.join(src, '/**/*.jade'))
-      .pipe(jade()
-      .on('error', gutil.log))
-      .pipe gulp.dest(path.join(dist))
-      .pipe(callback(promise.resolve))
-
-  @buildSCSS: (src, dist, promise) ->
-    gulp
-      .src(path.join(src, '/**/*.scss'))
-      .pipe(sass()
-      .on('error', gutil.log))
-      .pipe gulp.dest(path.join(dist))
-      .pipe(callback(promise.resolve))
-
-  @transferOther: (src, dist, promise) ->
-    gulp
-      .src([
-        path.join(src, '/**/*'),
-        "!#{path.join(src, '/**/*.coffee')}",
-        "!#{path.join(src, '/**/*.jade')}",
-        "!#{path.join(src, '/**/*.scss')}",
-      ])
-      .pipe gulp.dest(path.join(dist))
-      .pipe(callback(promise.resolve))
+  @transferOther: (src, dist, _start) ->
+    new Promise (resolve, reject) ->
+      gulp
+        .src([
+          path.join(src, '/**/*'),
+          "!#{path.join(src, '/**/*.coffee')}",
+          "!#{path.join(src, '/**/*.jade')}",
+          "!#{path.join(src, '/**/*.scss')}",
+        ])
+        .pipe(gulp.dest(path.join(dist)))
+        .on('error', reject)
+        .on('end', resolve)
