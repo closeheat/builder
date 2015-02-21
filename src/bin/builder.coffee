@@ -9,8 +9,8 @@ program
 program
   .command('build [source] [dist]')
   .description('build dist from source')
-  .action (source, dist) ->
-    Core.build(source, dist)
+  .action (src, dist) ->
+    new Core(src, dist).build()
 
 program.parse(process.argv)
 

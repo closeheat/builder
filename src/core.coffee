@@ -6,67 +6,83 @@ jade = require 'gulp-jade'
 sass = require 'gulp-sass'
 markdown = require 'gulp-markdown'
 marked = require 'marked'
-callback = require 'gulp-callback'
 Promise = require 'bluebird'
 _ = require 'lodash'
 
+Requirer = require './requirer'
+
 module.exports =
 class Core
-  @build: (src, dist) ->
+  constructor: (@src, @dist) ->
+    @dist_app = path.join(@dist, 'app')
+    @events = {}
+
+  build: ->
+    @transform().then =>
+      new Requirer(@dist, @dist_app, @emit).install()
+
+  on: (event_name, cb) =>
+    @events[event_name] = cb
+    @
+
+  emit: (event_name, data) =>
+    @events[event_name]?(data)
+
+  transform: ->
     Promise.all([
-      @buildCoffee(src, dist)
-      @buildJade(src, dist)
-      @buildSCSS(src, dist)
-      @buildMd(src, dist)
-      @transferOther(src, dist)
+      @buildCoffee()
+      @buildJade()
+      @buildSCSS()
+      @buildMd()
+      @transferOther()
     ])
 
-  @buildCoffee: (src, dist) ->
-    new Promise (resolve, reject) ->
+  buildCoffee: ->
+    new Promise (resolve, reject) =>
       gulp
-        .src(path.join(src, '/**/*.coffee'))
+        .src(path.join(@src, '/**/*.coffee'))
         .pipe(coffee(bare: true).on('error', reject))
-        .pipe(gulp.dest(path.join(dist)))
+        .pipe(gulp.dest(path.join(@dist_app)))
         .on('error', reject)
         .on('end', resolve)
 
-  @buildJade: (src, dist, _start) ->
-    new Promise (resolve, reject) ->
+  buildJade: ->
+    new Promise (resolve, reject) =>
       gulp
-        .src(path.join(src, '/**/*.jade'))
+        .src(path.join(@src, '/**/*.jade'))
         .pipe(jade().on('error', reject))
-        .pipe(gulp.dest(path.join(dist)))
+        .pipe(gulp.dest(path.join(@dist_app)))
         .on('error', reject)
         .on('end', resolve)
 
-  @buildSCSS: (src, dist, _start) ->
-    new Promise (resolve, reject) ->
+  buildSCSS: ->
+    new Promise (resolve, reject) =>
       gulp
-        .src(path.join(src, '/**/*.scss'))
+        .src(path.join(@src, '/**/*.scss'))
         .pipe(sass().on('error', reject))
-        .pipe(gulp.dest(path.join(dist)))
+        .pipe(gulp.dest(path.join(@dist_app)))
         .on('error', reject)
         .on('end', resolve)
 
-  @buildMd: (src, dist, _start) ->
-    new Promise (resolve, reject) ->
+  buildMd: ->
+    new Promise (resolve, reject) =>
       gulp
-        .src(path.join(src, '/**/*.md'))
+        .src(path.join(@src, '/**/*.md'))
         .pipe(markdown().on('error', reject))
-        .pipe(gulp.dest(path.join(dist)))
+        .pipe(gulp.dest(path.join(@dist_app)))
         .on('error', reject)
         .on('end', resolve)
 
-  @transferOther: (src, dist, _start) ->
-    new Promise (resolve, reject) ->
+  transferOther: ->
+    new Promise (resolve, reject) =>
       gulp
         .src([
-          path.join(src, '/**/*'),
-          "!#{path.join(src, '/**/*.coffee')}",
-          "!#{path.join(src, '/**/*.jade')}",
-          "!#{path.join(src, '/**/*.scss')}",
-          "!#{path.join(src, '/**/*.md')}",
+          path.join(@src, '/**/*'),
+          "!#{path.join(@src, '/**/*.coffee')}",
+          "!#{path.join(@src, '/**/*.jade')}",
+          "!#{path.join(@src, '/**/*.scss')}",
+          "!#{path.join(@src, '/**/*.md')}",
         ])
-        .pipe(gulp.dest(path.join(dist)))
+        .pipe(gulp.dest(path.join(@dist_app)))
         .on('error', reject)
         .on('end', resolve)
