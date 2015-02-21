@@ -4,6 +4,8 @@ coffee = require 'gulp-coffee'
 path = require 'path'
 jade = require 'gulp-jade'
 sass = require 'gulp-sass'
+markdown = require 'gulp-markdown'
+marked = require 'marked'
 callback = require 'gulp-callback'
 Promise = require 'bluebird'
 _ = require 'lodash'
@@ -15,6 +17,7 @@ class Core
       @buildCoffee(src, dist)
       @buildJade(src, dist)
       @buildSCSS(src, dist)
+      @buildMd(src, dist)
       @transferOther(src, dist)
     ])
 
@@ -45,6 +48,15 @@ class Core
         .on('error', reject)
         .on('end', resolve)
 
+  @buildMd: (src, dist, _start) ->
+    new Promise (resolve, reject) ->
+      gulp
+        .src(path.join(src, '/**/*.md'))
+        .pipe(markdown().on('error', reject))
+        .pipe(gulp.dest(path.join(dist)))
+        .on('error', reject)
+        .on('end', resolve)
+
   @transferOther: (src, dist, _start) ->
     new Promise (resolve, reject) ->
       gulp
@@ -53,6 +65,7 @@ class Core
           "!#{path.join(src, '/**/*.coffee')}",
           "!#{path.join(src, '/**/*.jade')}",
           "!#{path.join(src, '/**/*.scss')}",
+          "!#{path.join(src, '/**/*.md')}",
         ])
         .pipe(gulp.dest(path.join(dist)))
         .on('error', reject)
