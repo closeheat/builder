@@ -92,7 +92,7 @@ module.exports = Core = (function() {
   Core.prototype.transferOther = function() {
     return new Promise((function(_this) {
       return function(resolve, reject) {
-        return gulp.src([path.join(_this.src, '/**/*'), "!" + (path.join(_this.src, '/**/*.coffee')), "!" + (path.join(_this.src, '/**/*.jade')), "!" + (path.join(_this.src, '/**/*.scss')), "!" + (path.join(_this.src, '/**/*.md'))]).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
+        return gulp.src([path.join(_this.src, '/**/*'), "!" + (path.join(_this.src, '/**/*.coffee')), "!" + (path.join(_this.src, '/**/*.jade')), "!" + (path.join(_this.src, '/**/*.scss')), "!" + (path.join(_this.src, '/**/*.md')), "!" + (path.join(_this.src, '.git/**/*.*'))]).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
       };
     })(this));
   };

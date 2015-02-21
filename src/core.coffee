@@ -82,6 +82,7 @@ class Core
           "!#{path.join(@src, '/**/*.jade')}",
           "!#{path.join(@src, '/**/*.scss')}",
           "!#{path.join(@src, '/**/*.md')}",
+          "!#{path.join(@src, '.git/**/*.*')}",
         ])
         .pipe(gulp.dest(path.join(@dist_app)))
         .on('error', reject)
