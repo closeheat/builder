@@ -1,4 +1,4 @@
-var Core, Promise, Requirer, coffee, gulp, gutil, jade, markdown, marked, path, sass, _,
+var Core, Promise, Requirer, coffee, gulp, gutil, jade, markdown, marked, path, reactify, sass, _,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 gulp = require('gulp');
@@ -16,6 +16,8 @@ sass = require('gulp-sass');
 markdown = require('gulp-markdown');
 
 marked = require('marked');
+
+reactify = require('gulp-reactify');
 
 Promise = require('bluebird');
 
@@ -52,7 +54,7 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.transform = function() {
-    return Promise.all([this.buildCoffee(), this.buildJade(), this.buildSCSS(), this.buildMd(), this.transferOther()]);
+    return Promise.all([this.buildCoffee(), this.buildJade(), this.buildSCSS(), this.buildMd(), this.buildJSX(), this.transferOther()]);
   };
 
   Core.prototype.buildCoffee = function() {
@@ -61,6 +63,14 @@ module.exports = Core = (function() {
         return gulp.src(path.join(_this.src, '/**/*.coffee')).pipe(coffee({
           bare: true
         }).on('error', reject)).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
+      };
+    })(this));
+  };
+
+  Core.prototype.buildJSX = function() {
+    return new Promise((function(_this) {
+      return function(resolve, reject) {
+        return gulp.src(path.join(_this.src, '/**/*.jsx')).pipe(reactify().on('error', reject)).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
       };
     })(this));
   };

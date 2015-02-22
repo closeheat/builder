@@ -2,9 +2,9 @@ program = require 'commander'
 Core = require '../core'
 
 program
-  .version('0.2.1')
+  .version('0.3.0')
   .usage('<keywords>')
-  .description('Currently supports CoffeeScript, Jade, SCSS and Markdown.')
+  .description('Currently supports CoffeeScript, JSX, Jade, SCSS and Markdown.')
 
 program
   .command('build [source] [dist]')

@@ -6,6 +6,7 @@ jade = require 'gulp-jade'
 sass = require 'gulp-sass'
 markdown = require 'gulp-markdown'
 marked = require 'marked'
+reactify = require 'gulp-reactify'
 Promise = require 'bluebird'
 _ = require 'lodash'
 
@@ -34,6 +35,7 @@ class Core
       @buildJade()
       @buildSCSS()
       @buildMd()
+      @buildJSX()
       @transferOther()
     ])
 
@@ -42,6 +44,15 @@ class Core
       gulp
         .src(path.join(@src, '/**/*.coffee'))
         .pipe(coffee(bare: true).on('error', reject))
+        .pipe(gulp.dest(path.join(@dist_app)))
+        .on('error', reject)
+        .on('end', resolve)
+
+  buildJSX: ->
+    new Promise (resolve, reject) =>
+      gulp
+        .src(path.join(@src, '/**/*.jsx'))
+        .pipe(reactify().on('error', reject))
         .pipe(gulp.dest(path.join(@dist_app)))
         .on('error', reject)
         .on('end', resolve)
