@@ -9,18 +9,24 @@ marked = require 'marked'
 reactify = require 'gulp-reactify'
 Promise = require 'bluebird'
 _ = require 'lodash'
+dirmr = require 'dirmr'
 
 Requirer = require './requirer'
 
 module.exports =
 class Core
-  constructor: (@src, @dist) ->
-    @dist_app = path.join(@dist, 'app')
+  constructor: (@src, @dist, @tmp) ->
+    @tmp_app = path.join(@tmp, 'app')
     @events = {}
 
   build: ->
     @transform().then =>
-      new Requirer(@dist, @dist_app, @emit).install()
+      new Requirer(@dist, @tmp, @tmp_app, @emit).install().then =>
+        @moveToDist()
+
+  moveToDist: ->
+    dirmr([@tmp_app]).join(@dist).complete (err, result) ->
+      process.exit(0)
 
   on: (event_name, cb) =>
     @events[event_name] = cb
@@ -44,7 +50,7 @@ class Core
       gulp
         .src(path.join(@src, '/**/*.coffee'))
         .pipe(coffee(bare: true).on('error', reject))
-        .pipe(gulp.dest(path.join(@dist_app)))
+        .pipe(gulp.dest(path.join(@tmp_app)))
         .on('error', reject)
         .on('end', resolve)
 
@@ -53,7 +59,7 @@ class Core
       gulp
         .src(path.join(@src, '/**/*.jsx'))
         .pipe(reactify().on('error', reject))
-        .pipe(gulp.dest(path.join(@dist_app)))
+        .pipe(gulp.dest(path.join(@tmp_app)))
         .on('error', reject)
         .on('end', resolve)
 
@@ -62,7 +68,7 @@ class Core
       gulp
         .src(path.join(@src, '/**/*.jade'))
         .pipe(jade().on('error', reject))
-        .pipe(gulp.dest(path.join(@dist_app)))
+        .pipe(gulp.dest(path.join(@tmp_app)))
         .on('error', reject)
         .on('end', resolve)
 
@@ -71,7 +77,7 @@ class Core
       gulp
         .src(path.join(@src, '/**/*.scss'))
         .pipe(sass().on('error', reject))
-        .pipe(gulp.dest(path.join(@dist_app)))
+        .pipe(gulp.dest(path.join(@tmp_app)))
         .on('error', reject)
         .on('end', resolve)
 
@@ -80,7 +86,7 @@ class Core
       gulp
         .src(path.join(@src, '/**/*.md'))
         .pipe(markdown().on('error', reject))
-        .pipe(gulp.dest(path.join(@dist_app)))
+        .pipe(gulp.dest(path.join(@tmp_app)))
         .on('error', reject)
         .on('end', resolve)
 
@@ -95,6 +101,6 @@ class Core
           "!#{path.join(@src, '/**/*.md')}",
           "!#{path.join(@src, '.git/**/*.*')}",
         ])
-        .pipe(gulp.dest(path.join(@dist_app)))
+        .pipe(gulp.dest(path.join(@tmp_app)))
         .on('error', reject)
         .on('end', resolve)

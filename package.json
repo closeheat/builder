@@ -20,7 +20,9 @@
     "bluebird": "^2.9.12",
     "browserify": "^9.0.3",
     "chalk": "^0.5.1",
+    "chroot": "^0.1.9",
     "commander": "^2.6.0",
+    "dirmr": "0.0.3",
     "gulp": "^3.8.10",
     "gulp-callback": "0.0.3",
     "gulp-coffee": "2.2.0",
@@ -38,6 +40,7 @@
     "q": "^1.1.2",
     "request": "^2.53.0",
     "through2": "^0.6.3",
+    "tmp": "0.0.24",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
     "walkall": "git://github.com/sourcegraph/acorn-walkall.git#e1ee7e478a5d916e43771f01c72049630ef83a2f"

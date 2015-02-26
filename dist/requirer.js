@@ -8,19 +8,20 @@ Bundler = require('./bundler');
 RequireScanner = require('./require_scanner');
 
 module.exports = Requirer = (function() {
-  function Requirer(dist, dist_app, emit) {
+  function Requirer(dist, tmp, tmp_app, emit) {
     this.dist = dist;
-    this.dist_app = dist_app;
+    this.tmp = tmp;
+    this.tmp_app = tmp_app;
     this.emit = emit;
     this.install = __bind(this.install, this);
-    this.bundler = new Bundler(this.dist_app);
-    this.require_scanner = new RequireScanner(this.dist_app);
+    this.bundler = new Bundler(this.tmp_app);
+    this.require_scanner = new RequireScanner(this.tmp_app);
   }
 
   Requirer.prototype.install = function() {
     return this.require_scanner.getRequires().then((function(_this) {
       return function(modules) {
-        return new NpmDownloader(_this.dist, modules, _this.emit).downloadAll().then(function() {
+        return new NpmDownloader(_this.tmp, modules, _this.emit).downloadAll().then(function() {
           return _this.bundler.bundle();
         });
       };

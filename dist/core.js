@@ -1,4 +1,4 @@
-var Core, Promise, Requirer, coffee, gulp, gutil, jade, markdown, marked, path, reactify, sass, _,
+var Core, Promise, Requirer, coffee, dirmr, gulp, gutil, jade, markdown, marked, path, reactify, sass, _,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 gulp = require('gulp');
@@ -23,24 +23,35 @@ Promise = require('bluebird');
 
 _ = require('lodash');
 
+dirmr = require('dirmr');
+
 Requirer = require('./requirer');
 
 module.exports = Core = (function() {
-  function Core(src, dist) {
+  function Core(src, dist, tmp) {
     this.src = src;
     this.dist = dist;
+    this.tmp = tmp;
     this.emit = __bind(this.emit, this);
     this.on = __bind(this.on, this);
-    this.dist_app = path.join(this.dist, 'app');
+    this.tmp_app = path.join(this.tmp, 'app');
     this.events = {};
   }
 
   Core.prototype.build = function() {
     return this.transform().then((function(_this) {
       return function() {
-        return new Requirer(_this.dist, _this.dist_app, _this.emit).install();
+        return new Requirer(_this.dist, _this.tmp, _this.tmp_app, _this.emit).install().then(function() {
+          return _this.moveToDist();
+        });
       };
     })(this));
+  };
+
+  Core.prototype.moveToDist = function() {
+    return dirmr([this.tmp_app]).join(this.dist).complete(function(err, result) {
+      return process.exit(0);
+    });
   };
 
   Core.prototype.on = function(event_name, cb) {
@@ -62,7 +73,7 @@ module.exports = Core = (function() {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.coffee')).pipe(coffee({
           bare: true
-        }).on('error', reject)).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
+        }).on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
       };
     })(this));
   };
@@ -70,7 +81,7 @@ module.exports = Core = (function() {
   Core.prototype.buildJSX = function() {
     return new Promise((function(_this) {
       return function(resolve, reject) {
-        return gulp.src(path.join(_this.src, '/**/*.jsx')).pipe(reactify().on('error', reject)).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
+        return gulp.src(path.join(_this.src, '/**/*.jsx')).pipe(reactify().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
       };
     })(this));
   };
@@ -78,7 +89,7 @@ module.exports = Core = (function() {
   Core.prototype.buildJade = function() {
     return new Promise((function(_this) {
       return function(resolve, reject) {
-        return gulp.src(path.join(_this.src, '/**/*.jade')).pipe(jade().on('error', reject)).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
+        return gulp.src(path.join(_this.src, '/**/*.jade')).pipe(jade().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
       };
     })(this));
   };
@@ -86,7 +97,7 @@ module.exports = Core = (function() {
   Core.prototype.buildSCSS = function() {
     return new Promise((function(_this) {
       return function(resolve, reject) {
-        return gulp.src(path.join(_this.src, '/**/*.scss')).pipe(sass().on('error', reject)).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
+        return gulp.src(path.join(_this.src, '/**/*.scss')).pipe(sass().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
       };
     })(this));
   };
@@ -94,7 +105,7 @@ module.exports = Core = (function() {
   Core.prototype.buildMd = function() {
     return new Promise((function(_this) {
       return function(resolve, reject) {
-        return gulp.src(path.join(_this.src, '/**/*.md')).pipe(markdown().on('error', reject)).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
+        return gulp.src(path.join(_this.src, '/**/*.md')).pipe(markdown().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
       };
     })(this));
   };
@@ -102,7 +113,7 @@ module.exports = Core = (function() {
   Core.prototype.transferOther = function() {
     return new Promise((function(_this) {
       return function(resolve, reject) {
-        return gulp.src([path.join(_this.src, '/**/*'), "!" + (path.join(_this.src, '/**/*.coffee')), "!" + (path.join(_this.src, '/**/*.jade')), "!" + (path.join(_this.src, '/**/*.scss')), "!" + (path.join(_this.src, '/**/*.md')), "!" + (path.join(_this.src, '.git/**/*.*'))]).pipe(gulp.dest(path.join(_this.dist_app))).on('error', reject).on('end', resolve);
+        return gulp.src([path.join(_this.src, '/**/*'), "!" + (path.join(_this.src, '/**/*.coffee')), "!" + (path.join(_this.src, '/**/*.jade')), "!" + (path.join(_this.src, '/**/*.scss')), "!" + (path.join(_this.src, '/**/*.md')), "!" + (path.join(_this.src, '.git/**/*.*'))]).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
       };
     })(this));
   };
