@@ -25,8 +25,11 @@ class Core
         @moveToDist()
 
   moveToDist: ->
-    dirmr([@tmp_app]).join(@dist).complete (err, result) ->
-      process.exit(0)
+    new Promise (resolve, reject) =>
+      dirmr([@tmp_app]).join(@dist).complete (err, result) ->
+        return reject(err) if err
+
+        resolve()
 
   on: (event_name, cb) =>
     @events[event_name] = cb

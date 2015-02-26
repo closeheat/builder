@@ -49,9 +49,16 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.moveToDist = function() {
-    return dirmr([this.tmp_app]).join(this.dist).complete(function(err, result) {
-      return process.exit(0);
-    });
+    return new Promise((function(_this) {
+      return function(resolve, reject) {
+        return dirmr([_this.tmp_app]).join(_this.dist).complete(function(err, result) {
+          if (err) {
+            return reject(err);
+          }
+          return resolve();
+        });
+      };
+    })(this));
   };
 
   Core.prototype.on = function(event_name, cb) {
