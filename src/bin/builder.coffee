@@ -1,11 +1,12 @@
 Promise = require 'bluebird'
 program = require 'commander'
 tmp = require 'tmp'
+pkg = require '../../package.json'
 
 Core = require '../core'
 
 program
-  .version('0.3.0')
+  .version(pkg.version)
   .usage('<keywords>')
   .description('Currently supports CoffeeScript, JSX, Jade, SCSS and Markdown.')
 

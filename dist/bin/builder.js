@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var Core, Promise, program, tmp;
+var Core, Promise, pkg, program, tmp;
 
 Promise = require('bluebird');
 
@@ -8,9 +8,11 @@ program = require('commander');
 
 tmp = require('tmp');
 
+pkg = require('../../package.json');
+
 Core = require('../core');
 
-program.version('0.3.0').usage('<keywords>').description('Currently supports CoffeeScript, JSX, Jade, SCSS and Markdown.');
+program.version(pkg.version).usage('<keywords>').description('Currently supports CoffeeScript, JSX, Jade, SCSS and Markdown.');
 
 program.command('build [source] [dist]').description('build dist from source').option('--tmp [dir]', 'Temporary dir').action(function(src, dist, opts) {
   if (opts.tmp) {
