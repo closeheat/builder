@@ -5,8 +5,8 @@ RequireScanner = require './require_scanner'
 module.exports =
 class Requirer
   constructor: (@dist, @tmp, @tmp_app, @emit) ->
-    @bundler = new Bundler(@tmp_app)
     @require_scanner = new RequireScanner(@tmp_app)
+    @bundler = new Bundler(@tmp_app)
 
   install: =>
     @require_scanner.getRequires().then (modules) =>

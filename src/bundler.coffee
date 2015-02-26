@@ -12,12 +12,12 @@ gulp = require 'gulp'
 
 module.exports =
 class Bundler
-  constructor: (@dist_app) ->
+  constructor: (@tmp_app) ->
 
   bundle: ->
     new Promise (resolve, reject) =>
       gulp
-        .src(path.join(@dist_app, '**/*.js'))
+        .src(path.join(@tmp_app, '**/*.js'))
         .pipe(@minFilter())
         .pipe(@exec(resolve, reject).on('error', reject))
 
@@ -31,21 +31,20 @@ class Bundler
         cb(null, file)
         return
 
-      relative = path.relative(@dist_app, file.path)
+      relative = path.relative(@tmp_app, file.path)
 
-      bundler = browserify {
+      bundle = browserify(
         entries: [file.path]
         debug: true
         standalone: 'CloseheatStandaloneModule'
-      }
+      ).bundle().on('error', reject)
 
-      bundler
-        .bundle().on('error', reject)
+      bundle
         .pipe(source(relative))
         .pipe(buffer())
         .pipe(sourcemaps.init(loadMaps: true))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(@dist_app))
+        .pipe(gulp.dest(@tmp_app))
         .on('error', reject)
         .on('end', cb)
 

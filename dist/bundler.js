@@ -23,14 +23,14 @@ sourcemaps = require('gulp-sourcemaps');
 gulp = require('gulp');
 
 module.exports = Bundler = (function() {
-  function Bundler(dist_app) {
-    this.dist_app = dist_app;
+  function Bundler(tmp_app) {
+    this.tmp_app = tmp_app;
   }
 
   Bundler.prototype.bundle = function() {
     return new Promise((function(_this) {
       return function(resolve, reject) {
-        return gulp.src(path.join(_this.dist_app, '**/*.js')).pipe(_this.minFilter()).pipe(_this.exec(resolve, reject).on('error', reject));
+        return gulp.src(path.join(_this.tmp_app, '**/*.js')).pipe(_this.minFilter()).pipe(_this.exec(resolve, reject).on('error', reject));
       };
     })(this));
   };
@@ -44,20 +44,20 @@ module.exports = Bundler = (function() {
   Bundler.prototype.exec = function(resolve, reject) {
     return through.obj((function(_this) {
       return function(file, enc, cb) {
-        var bundler, relative;
+        var bundle, relative;
         if (file.isNull()) {
           cb(null, file);
           return;
         }
-        relative = path.relative(_this.dist_app, file.path);
-        bundler = browserify({
+        relative = path.relative(_this.tmp_app, file.path);
+        bundle = browserify({
           entries: [file.path],
           debug: true,
           standalone: 'CloseheatStandaloneModule'
-        });
-        return bundler.bundle().on('error', reject).pipe(source(relative)).pipe(buffer()).pipe(sourcemaps.init({
+        }).bundle().on('error', reject);
+        return bundle.pipe(source(relative)).pipe(buffer()).pipe(sourcemaps.init({
           loadMaps: true
-        })).pipe(sourcemaps.write('./')).pipe(gulp.dest(_this.dist_app)).on('error', reject).on('end', cb);
+        })).pipe(sourcemaps.write('./')).pipe(gulp.dest(_this.tmp_app)).on('error', reject).on('end', cb);
       };
     })(this), resolve);
   };
