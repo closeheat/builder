@@ -1,4 +1,4 @@
-var Core, Promise, Requirer, coffee, dirmr, gulp, gutil, jade, markdown, marked, path, reactify, sass, _,
+var Core, Promise, Requirer, coffee, dirmr, fs, gulp, gutil, jade, markdown, marked, path, reactify, sass, _,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 gulp = require('gulp');
@@ -25,6 +25,8 @@ _ = require('lodash');
 
 dirmr = require('dirmr');
 
+fs = require('fs');
+
 Requirer = require('./requirer');
 
 module.exports = Core = (function() {
@@ -34,6 +36,9 @@ module.exports = Core = (function() {
     this.tmp = tmp;
     this.emit = __bind(this.emit, this);
     this.on = __bind(this.on, this);
+    if (fs.existsSync(this.tmp)) {
+      fs.rmdirSync(this.tmp);
+    }
     this.tmp_app = path.join(this.tmp, 'app');
     this.events = {};
   }

@@ -10,12 +10,14 @@ reactify = require 'gulp-reactify'
 Promise = require 'bluebird'
 _ = require 'lodash'
 dirmr = require 'dirmr'
+fs = require 'fs'
 
 Requirer = require './requirer'
 
 module.exports =
 class Core
   constructor: (@src, @dist, @tmp) ->
+    fs.rmdirSync(@tmp) if fs.existsSync(@tmp)
     @tmp_app = path.join(@tmp, 'app')
     @events = {}
 
