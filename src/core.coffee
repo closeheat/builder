@@ -1,14 +1,11 @@
 gulp = require 'gulp'
-gutil = require 'gulp-util'
 coffee = require 'gulp-coffee'
 path = require 'path'
 jade = require 'gulp-jade'
 sass = require 'gulp-sass'
 markdown = require 'gulp-markdown'
-marked = require 'marked'
 reactify = require 'gulp-reactify'
 Promise = require 'bluebird'
-_ = require 'lodash'
 dirmr = require 'dirmr'
 fs = require 'fs.extra'
 
@@ -18,7 +15,7 @@ module.exports =
 class Core
   constructor: (@src, @dist, @tmp) ->
     @tmp_app = path.join(@tmp, 'app')
-    fs.rmrfSync(@tmp_app) if fs.existsSync(@tmp_app)
+    fs.rmrfSync(@tmp_app)
     @events = {}
 
   build: ->

@@ -1,10 +1,9 @@
 fs = require 'fs'
 Promise = require 'bluebird'
-_ = require 'lodash'
 path = require 'path'
 gulpFilter = require('gulp-filter')
 through = require('through2')
-browserify = require 'browserify'
+browserifyInc = require('browserify-incremental')
 source = require('vinyl-source-stream')
 buffer = require('vinyl-buffer')
 sourcemaps = require('gulp-sourcemaps')
@@ -12,7 +11,7 @@ gulp = require 'gulp'
 
 module.exports =
 class Bundler
-  constructor: (@tmp_app) ->
+  constructor: (@tmp, @tmp_app) ->
 
   bundle: ->
     new Promise (resolve, reject) =>
@@ -31,14 +30,14 @@ class Bundler
         cb(null, file)
         return
 
-      relative = path.relative(@tmp_app, file.path)
-
-      bundle = browserify(
+      bundle = browserifyInc(
         entries: [file.path]
         debug: true
         standalone: 'CloseheatStandaloneModule'
+        cacheFile: path.join(@tmp, 'browserify-cache.json')
       ).bundle().on('error', reject)
 
+      relative = path.relative(@tmp_app, file.path)
       bundle
         .pipe(source(relative))
         .pipe(buffer())

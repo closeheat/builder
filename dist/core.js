@@ -1,9 +1,7 @@
-var Core, Promise, Requirer, coffee, dirmr, fs, gulp, gutil, jade, markdown, marked, path, reactify, sass, _,
+var Core, Promise, Requirer, coffee, dirmr, fs, gulp, jade, markdown, path, reactify, sass,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 gulp = require('gulp');
-
-gutil = require('gulp-util');
 
 coffee = require('gulp-coffee');
 
@@ -15,13 +13,9 @@ sass = require('gulp-sass');
 
 markdown = require('gulp-markdown');
 
-marked = require('marked');
-
 reactify = require('gulp-reactify');
 
 Promise = require('bluebird');
-
-_ = require('lodash');
 
 dirmr = require('dirmr');
 
@@ -37,9 +31,7 @@ module.exports = Core = (function() {
     this.emit = __bind(this.emit, this);
     this.on = __bind(this.on, this);
     this.tmp_app = path.join(this.tmp, 'app');
-    if (fs.existsSync(this.tmp_app)) {
-      fs.rmrfSync(this.tmp_app);
-    }
+    fs.rmrfSync(this.tmp_app);
     this.events = {};
   }
 

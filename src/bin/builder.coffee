@@ -1,9 +1,5 @@
-Promise = require 'bluebird'
 program = require 'commander'
-tmp = require 'tmp'
 pkg = require '../../package.json'
-
-Core = require '../core'
 
 program
   .version(pkg.version)
@@ -15,9 +11,12 @@ program
   .description('build dist from source')
   .option('--tmp [dir]', 'Temporary dir')
   .action (src, dist, opts) ->
+    Core = require '../core'
+
     if opts.tmp
       new Core(src, dist, opts.tmp).build()
     else
+      tmp = require 'tmp'
       tmp.dir (err, dir) ->
         new Core(src, dist, dir).build()
 

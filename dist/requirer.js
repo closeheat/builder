@@ -15,7 +15,7 @@ module.exports = Requirer = (function() {
     this.emit = emit;
     this.install = __bind(this.install, this);
     this.require_scanner = new RequireScanner(this.tmp_app);
-    this.bundler = new Bundler(this.tmp_app);
+    this.bundler = new Bundler(this.tmp, this.tmp_app);
   }
 
   Requirer.prototype.install = function() {
