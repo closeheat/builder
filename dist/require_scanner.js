@@ -18,11 +18,11 @@ module.exports = RequireScanner = (function() {
   function RequireScanner(dist_app) {
     this.dist_app = dist_app;
     this.finish = __bind(this.finish, this);
-    this.modules = [];
+    this.modules = {};
   }
 
-  RequireScanner.prototype.register = function(module) {
-    return this.modules.push(module);
+  RequireScanner.prototype.register = function(name, version) {
+    return this.modules[name] = version;
   };
 
   RequireScanner.prototype.getRequires = function() {
@@ -50,7 +50,7 @@ module.exports = RequireScanner = (function() {
           walk = require('acorn/util/walk');
           walkall = require('walkall');
           walk.simple(ast, walkall.makeVisitors(function(node) {
-            var module, module_name, submodules, _ref;
+            var module, module_name, name, submodules, version, _ref, _ref1;
             if (node.type !== 'CallExpression') {
               return;
             }
@@ -62,7 +62,8 @@ module.exports = RequireScanner = (function() {
               return;
             }
             _ref = module_name.split('/'), module = _ref[0], submodules = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
-            return _this.register(module);
+            _ref1 = module.split('@'), name = _ref1[0], version = _ref1[1];
+            return _this.register(name, version);
           }), walkall.traversers);
           return cb();
         } catch (_error) {

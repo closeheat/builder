@@ -13,14 +13,16 @@ class NpmDownloader
       if _.isEmpty(@missing())
         resolve()
 
-      Promise.each(@missing(), (module) =>
-        @download(module)
+      Promise.each(_.keys(@missing()), (name) =>
+        @download(name)
       ).then ->
         resolve()
 
   missing: =>
-    _.reject _.uniq(@modules), (module) =>
+    existing = _.select _.uniq(_.keys(@modules)), (module) =>
       fs.existsSync(path.join(@dist, 'node_modules', module))
+
+    _.omit(@modules, existing)
 
   download: (module) ->
     new Promise (resolve, reject) =>
@@ -29,6 +31,7 @@ class NpmDownloader
         name: module
         loglevel: 'silent'
         prefix: @dist
+        version: @missing()[module] || '*'
       }).exec({
         error: (err) ->
           @emit('error', err)

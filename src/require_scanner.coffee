@@ -8,10 +8,10 @@ acorn = require 'acorn'
 module.exports =
 class RequireScanner
   constructor: (@dist_app) ->
-    @modules = []
+    @modules = {}
 
-  register: (module) ->
-    @modules.push(module)
+  register: (name, version) ->
+    @modules[name] = version
 
   getRequires: ->
     new Promise (resolve, reject) =>
@@ -41,7 +41,8 @@ class RequireScanner
           return unless module_name.match(/^[a-zA-Z]/)
 
           [module, submodules...] = module_name.split('/')
-          @register(module)
+          [name, version] = module.split('@')
+          @register(name, version)
         ), walkall.traversers)
 
         cb()

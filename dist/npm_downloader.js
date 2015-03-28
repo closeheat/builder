@@ -26,8 +26,8 @@ module.exports = NpmDownloader = (function() {
         if (_.isEmpty(_this.missing())) {
           resolve();
         }
-        return Promise.each(_this.missing(), function(module) {
-          return _this.download(module);
+        return Promise.each(_.keys(_this.missing()), function(name) {
+          return _this.download(name);
         }).then(function() {
           return resolve();
         });
@@ -36,11 +36,13 @@ module.exports = NpmDownloader = (function() {
   };
 
   NpmDownloader.prototype.missing = function() {
-    return _.reject(_.uniq(this.modules), (function(_this) {
+    var existing;
+    existing = _.select(_.uniq(_.keys(this.modules)), (function(_this) {
       return function(module) {
         return fs.existsSync(path.join(_this.dist, 'node_modules', module));
       };
     })(this));
+    return _.omit(this.modules, existing);
   };
 
   NpmDownloader.prototype.download = function(module) {
@@ -50,7 +52,8 @@ module.exports = NpmDownloader = (function() {
         return NPM.installPackage({
           name: module,
           loglevel: 'silent',
-          prefix: _this.dist
+          prefix: _this.dist,
+          version: _this.missing()[module] || '*'
         }).exec({
           error: function(err) {
             this.emit('error', err);
