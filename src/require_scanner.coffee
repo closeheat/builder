@@ -3,7 +3,7 @@ _ = require 'lodash'
 path = require 'path'
 through = require 'through2'
 gulp = require 'gulp'
-acorn = require 'acorn'
+acorn = require 'acorn/acorn_loose'
 
 module.exports =
 class RequireScanner
@@ -29,7 +29,7 @@ class RequireScanner
           cb(null, file)
           return
 
-        ast = acorn.parse(file.contents.toString())
+        ast = acorn.parse_dammit(file.contents.toString())
         walk = require('acorn/util/walk')
         walkall = require('walkall')
 

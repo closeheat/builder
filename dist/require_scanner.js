@@ -12,7 +12,7 @@ through = require('through2');
 
 gulp = require('gulp');
 
-acorn = require('acorn');
+acorn = require('acorn/acorn_loose');
 
 module.exports = RequireScanner = (function() {
   function RequireScanner(dist_app) {
@@ -46,7 +46,7 @@ module.exports = RequireScanner = (function() {
             cb(null, file);
             return;
           }
-          ast = acorn.parse(file.contents.toString());
+          ast = acorn.parse_dammit(file.contents.toString());
           walk = require('acorn/util/walk');
           walkall = require('walkall');
           walk.simple(ast, walkall.makeVisitors(function(node) {
