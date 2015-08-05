@@ -1,4 +1,4 @@
-var Core, Promise, Requirer, coffee, dirmr, fs, gulp, jade, markdown, path, reactify, sass,
+var Bundler, Core, Promise, coffee, dirmr, fs, gulp, jade, markdown, path, reactify, sass,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 gulp = require('gulp');
@@ -21,7 +21,7 @@ dirmr = require('dirmr');
 
 fs = require('fs.extra');
 
-Requirer = require('./requirer');
+Bundler = require('./bundler');
 
 module.exports = Core = (function() {
   function Core(src, dist, tmp) {
@@ -33,12 +33,13 @@ module.exports = Core = (function() {
     this.tmp_app = path.join(this.tmp, 'app');
     fs.rmrfSync(this.tmp_app);
     this.events = {};
+    this.bundler = new Bundler(this.tmp_app, this.tmp_app);
   }
 
   Core.prototype.build = function() {
     return this.transform().then((function(_this) {
       return function() {
-        return new Requirer(_this.dist, _this.tmp, _this.tmp_app, _this.emit).install().then(function() {
+        return _this.bundler.bundle().then(function() {
           return _this.moveToDist();
         });
       };

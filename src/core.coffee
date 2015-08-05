@@ -9,7 +9,8 @@ Promise = require 'bluebird'
 dirmr = require 'dirmr'
 fs = require 'fs.extra'
 
-Requirer = require './requirer'
+Bundler = require './bundler'
+# Requirer = require './requirer'
 
 module.exports =
 class Core
@@ -17,11 +18,13 @@ class Core
     @tmp_app = path.join(@tmp, 'app')
     fs.rmrfSync(@tmp_app)
     @events = {}
+    @bundler = new Bundler(@tmp_app, @tmp_app)
 
   build: ->
     @transform().then =>
-      new Requirer(@dist, @tmp, @tmp_app, @emit).install().then =>
+      @bundler.bundle().then =>
         @moveToDist()
+      # new Requirer(@dist, @tmp, @tmp_app, @emit).install().then =>
 
   moveToDist: ->
     new Promise (resolve, reject) =>

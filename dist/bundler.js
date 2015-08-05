@@ -36,7 +36,7 @@ module.exports = Bundler = (function() {
 
   Bundler.prototype.minFilter = function() {
     return gulpFilter(function(file) {
-      return !/.min./.test(file.path);
+      return !/.min./.test(file.path) && !/node_modules/.test(file.path);
     });
   };
 

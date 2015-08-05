@@ -22,7 +22,7 @@ class Bundler
 
   minFilter: ->
     gulpFilter (file) ->
-      !/.min./.test(file.path)
+      !/.min./.test(file.path) && !/node_modules/.test(file.path)
 
   exec: (resolve, reject) ->
     through.obj((file, enc, cb) =>
