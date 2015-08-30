@@ -1,4 +1,4 @@
-var Core, Promise, Requirer, coffee, dirmr, fs, gulp, jade, markdown, path, reactify, sass,
+var Core, Promise, Requirer, coffee, dirmr, fs, gulp, jade, markdown, path, reactify, sass, _,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 gulp = require('gulp');
@@ -21,13 +21,16 @@ dirmr = require('dirmr');
 
 fs = require('fs.extra');
 
+_ = require('lodash');
+
 Requirer = require('./requirer');
 
 module.exports = Core = (function() {
-  function Core(src, dist, tmp) {
+  function Core(src, dist, tmp, extensions) {
     this.src = src;
     this.dist = dist;
     this.tmp = tmp;
+    this.extensions = extensions;
     this.emit = __bind(this.emit, this);
     this.on = __bind(this.on, this);
     this.tmp_app = path.join(this.tmp, 'app');
@@ -72,7 +75,28 @@ module.exports = Core = (function() {
     return Promise.all([this.buildCoffee(), this.buildJade(), this.buildSCSS(), this.buildMd(), this.buildJSX(), this.transferOther()]);
   };
 
+  Core.prototype.donePromise = function() {
+    return new Promise((function(_this) {
+      return function(resolve, reject) {
+        return resolve();
+      };
+    })(this));
+  };
+
+  Core.prototype.execExtension = function(ext) {
+    if (_.isEmpty(this.extensions)) {
+      return true;
+    }
+    if (_.include(this.extensions, ext)) {
+      return true;
+    }
+    return false;
+  };
+
   Core.prototype.buildCoffee = function() {
+    if (!this.execExtension('coffee')) {
+      return this.donePromise();
+    }
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.coffee')).pipe(coffee({
@@ -83,6 +107,9 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.buildJSX = function() {
+    if (!this.execExtension('jsx')) {
+      return this.donePromise();
+    }
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.jsx')).pipe(reactify().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
@@ -91,6 +118,9 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.buildJade = function() {
+    if (!this.execExtension('jade')) {
+      return this.donePromise();
+    }
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.jade')).pipe(jade().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
@@ -99,6 +129,9 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.buildSCSS = function() {
+    if (!this.execExtension('scss')) {
+      return this.donePromise();
+    }
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.scss')).pipe(sass().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
@@ -107,6 +140,9 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.buildMd = function() {
+    if (!this.execExtension('md')) {
+      return this.donePromise();
+    }
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.md')).pipe(markdown().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);

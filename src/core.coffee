@@ -8,12 +8,13 @@ reactify = require 'gulp-reactify'
 Promise = require 'bluebird'
 dirmr = require 'dirmr'
 fs = require 'fs.extra'
+_ = require 'lodash'
 
 Requirer = require './requirer'
 
 module.exports =
 class Core
-  constructor: (@src, @dist, @tmp) ->
+  constructor: (@src, @dist, @tmp, @extensions) ->
     @tmp_app = path.join(@tmp, 'app')
     fs.rmrfSync(@tmp_app)
     @events = {}
@@ -47,7 +48,19 @@ class Core
       @transferOther()
     ])
 
+  donePromise: ->
+    new Promise (resolve, reject) =>
+      resolve()
+
+  execExtension: (ext) ->
+    return true if _.isEmpty(@extensions)
+    return true if _.include(@extensions, ext)
+
+    false
+
   buildCoffee: ->
+    return @donePromise() unless @execExtension('coffee')
+
     new Promise (resolve, reject) =>
       gulp
         .src(path.join(@src, '/**/*.coffee'))
@@ -57,6 +70,8 @@ class Core
         .on('end', resolve)
 
   buildJSX: ->
+    return @donePromise() unless @execExtension('jsx')
+
     new Promise (resolve, reject) =>
       gulp
         .src(path.join(@src, '/**/*.jsx'))
@@ -66,6 +81,8 @@ class Core
         .on('end', resolve)
 
   buildJade: ->
+    return @donePromise() unless @execExtension('jade')
+
     new Promise (resolve, reject) =>
       gulp
         .src(path.join(@src, '/**/*.jade'))
@@ -75,6 +92,8 @@ class Core
         .on('end', resolve)
 
   buildSCSS: ->
+    return @donePromise() unless @execExtension('scss')
+
     new Promise (resolve, reject) =>
       gulp
         .src(path.join(@src, '/**/*.scss'))
@@ -84,6 +103,8 @@ class Core
         .on('end', resolve)
 
   buildMd: ->
+    return @donePromise() unless @execExtension('md')
+
     new Promise (resolve, reject) =>
       gulp
         .src(path.join(@src, '/**/*.md'))
