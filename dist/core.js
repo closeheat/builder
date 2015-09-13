@@ -1,19 +1,9 @@
-var Core, Promise, Requirer, coffee, dirmr, fs, gulp, jade, markdown, path, reactify, sass, _,
+var Core, Promise, Requirer, dirmr, fs, gulp, path, _,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 gulp = require('gulp');
 
-coffee = require('gulp-coffee');
-
 path = require('path');
-
-jade = require('gulp-jade');
-
-sass = require('gulp-sass');
-
-markdown = require('gulp-markdown');
-
-reactify = require('gulp-reactify');
 
 Promise = require('bluebird');
 
@@ -94,9 +84,11 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.buildCoffee = function() {
+    var coffee;
     if (!this.execExtension('coffee')) {
       return this.donePromise();
     }
+    coffee = require('gulp-coffee');
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.coffee')).pipe(coffee({
@@ -107,9 +99,11 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.buildJSX = function() {
+    var reactify;
     if (!this.execExtension('jsx')) {
       return this.donePromise();
     }
+    reactify = require('gulp-reactify');
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.jsx')).pipe(reactify().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
@@ -118,9 +112,11 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.buildJade = function() {
+    var jade;
     if (!this.execExtension('jade')) {
       return this.donePromise();
     }
+    jade = require('gulp-jade');
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.jade')).pipe(jade().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
@@ -129,9 +125,11 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.buildSCSS = function() {
+    var sass;
     if (!this.execExtension('scss')) {
       return this.donePromise();
     }
+    sass = require('gulp-sass');
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.scss')).pipe(sass().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
@@ -140,9 +138,11 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.buildMd = function() {
+    var markdown;
     if (!this.execExtension('md')) {
       return this.donePromise();
     }
+    markdown = require('gulp-markdown');
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return gulp.src(path.join(_this.src, '/**/*.md')).pipe(markdown().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);

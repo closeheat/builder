@@ -1,10 +1,5 @@
 gulp = require 'gulp'
-coffee = require 'gulp-coffee'
 path = require 'path'
-jade = require 'gulp-jade'
-sass = require 'gulp-sass'
-markdown = require 'gulp-markdown'
-reactify = require 'gulp-reactify'
 Promise = require 'bluebird'
 dirmr = require 'dirmr'
 fs = require 'fs.extra'
@@ -60,6 +55,7 @@ class Core
 
   buildCoffee: ->
     return @donePromise() unless @execExtension('coffee')
+    coffee = require 'gulp-coffee'
 
     new Promise (resolve, reject) =>
       gulp
@@ -71,6 +67,7 @@ class Core
 
   buildJSX: ->
     return @donePromise() unless @execExtension('jsx')
+    reactify = require 'gulp-reactify'
 
     new Promise (resolve, reject) =>
       gulp
@@ -82,6 +79,7 @@ class Core
 
   buildJade: ->
     return @donePromise() unless @execExtension('jade')
+    jade = require 'gulp-jade'
 
     new Promise (resolve, reject) =>
       gulp
@@ -93,6 +91,7 @@ class Core
 
   buildSCSS: ->
     return @donePromise() unless @execExtension('scss')
+    sass = require 'gulp-sass'
 
     new Promise (resolve, reject) =>
       gulp
@@ -104,6 +103,7 @@ class Core
 
   buildMd: ->
     return @donePromise() unless @execExtension('md')
+    markdown = require 'gulp-markdown'
 
     new Promise (resolve, reject) =>
       gulp
