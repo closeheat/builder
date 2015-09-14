@@ -9,6 +9,7 @@ replace = require 'gulp-replace'
 rename = require 'gulp-rename'
 uglify = require 'gulp-uglify'
 insert = require 'gulp-insert'
+modConcat = require("node-module-concat")
 
 gulp.task 'default', ['coffee']
 
@@ -28,3 +29,10 @@ gulp.task 'coffee', ->
     .on('error', gutil.log))
     .pipe(insert.prepend('#!/usr/bin/env node\n\n'))
     .pipe gulp.dest('./dist/bin/')
+
+gulp.task 'concat', ->
+  outputFile = "./concatenated.js"
+  modConcat "./dist/bin/builder.js", outputFile, (err, files) ->
+    if (err)
+      throw err
+    console.log(files.length + " were combined into " + outputFile)

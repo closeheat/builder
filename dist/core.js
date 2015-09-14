@@ -31,9 +31,7 @@ module.exports = Core = (function() {
   Core.prototype.build = function() {
     return this.transform().then((function(_this) {
       return function() {
-        return new Requirer(_this.dist, _this.tmp, _this.tmp_app, _this.emit).install().then(function() {
-          return _this.moveToDist();
-        });
+        return _this.moveToDist();
       };
     })(this));
   };

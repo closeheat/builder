@@ -18,7 +18,9 @@
   "dependencies": {
     "acorn": "^0.11.0",
     "bluebird": "^2.9.12",
+    "browserify": "9.0.3",
     "browserify-incremental": "^1.5.0",
+    "cache-require-paths": "^0.1.2",
     "chalk": "^0.5.1",
     "commander": "^2.6.0",
     "dirmr": "0.0.3",
@@ -34,11 +36,13 @@
     "lodash": "^3.2.0",
     "machinepack-npm": "^3.1.0",
     "marked": "^0.3.3",
+    "node-module-concat": "^1.1.0",
     "request": "^2.53.0",
     "through2": "^0.6.3",
     "tmp": "0.0.24",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
+    "vinyl-transform": "^1.0.0",
     "walkall": "git://github.com/sourcegraph/acorn-walkall.git#e1ee7e478a5d916e43771f01c72049630ef83a2f"
   },
   "keywords": [

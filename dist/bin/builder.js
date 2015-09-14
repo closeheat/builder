@@ -2,6 +2,8 @@
 
 var collect, pkg, program;
 
+require('cache-require-paths');
+
 program = require('commander');
 
 pkg = require('../../package.json');
