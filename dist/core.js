@@ -1,5 +1,5 @@
-var Core, Promise, Requirer, dirmr, fs, gulp, path, _,
-  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var Core, Promise, Requirer, _, dirmr, fs, gulp, path,
+  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 gulp = require('gulp');
 
@@ -21,8 +21,8 @@ module.exports = Core = (function() {
     this.dist = dist;
     this.tmp = tmp;
     this.extensions = extensions;
-    this.emit = __bind(this.emit, this);
-    this.on = __bind(this.on, this);
+    this.emit = bind(this.emit, this);
+    this.on = bind(this.on, this);
     this.tmp_app = path.join(this.tmp, 'app');
     fs.rmrfSync(this.tmp_app);
     this.events = {};
@@ -31,7 +31,9 @@ module.exports = Core = (function() {
   Core.prototype.build = function() {
     return this.transform().then((function(_this) {
       return function() {
-        return _this.moveToDist();
+        return new Requirer(_this.dist, _this.tmp, _this.tmp_app, _this.emit).install().then(function() {
+          return _this.moveToDist();
+        });
       };
     })(this));
   };
@@ -55,8 +57,8 @@ module.exports = Core = (function() {
   };
 
   Core.prototype.emit = function(event_name, data) {
-    var _base;
-    return typeof (_base = this.events)[event_name] === "function" ? _base[event_name](data) : void 0;
+    var base;
+    return typeof (base = this.events)[event_name] === "function" ? base[event_name](data) : void 0;
   };
 
   Core.prototype.transform = function() {
