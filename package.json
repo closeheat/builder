@@ -44,7 +44,7 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "vinyl-transform": "^1.0.0",
-    "walkall": "git://github.com/sourcegraph/acorn-walkall.git#e1ee7e478a5d916e43771f01c72049630ef83a2f"
+    "walkall": "^0.0.5"
   },
   "keywords": [
     "closeheat",

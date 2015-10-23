@@ -3,7 +3,7 @@ _ = require 'lodash'
 path = require 'path'
 through = require 'through2'
 gulp = require 'gulp'
-acorn = require 'acorn/acorn_loose'
+acorn = require 'acorn/dist/acorn_loose'
 
 module.exports =
 class RequireScanner

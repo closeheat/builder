@@ -12,7 +12,7 @@ through = require('through2');
 
 gulp = require('gulp');
 
-acorn = require('acorn/acorn_loose');
+acorn = require('acorn/dist/acorn_loose');
 
 module.exports = RequireScanner = (function() {
   function RequireScanner(dist_app) {
