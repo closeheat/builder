@@ -1,5 +1,5 @@
 var Bundler, NpmDownloader, RequireScanner, Requirer,
-  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 NpmDownloader = require('./npm_downloader');
 
@@ -13,7 +13,7 @@ module.exports = Requirer = (function() {
     this.tmp = tmp;
     this.tmp_app = tmp_app;
     this.emit = emit;
-    this.install = __bind(this.install, this);
+    this.install = bind(this.install, this);
     this.require_scanner = new RequireScanner(this.tmp_app);
     this.bundler = new Bundler(this.tmp, this.tmp_app);
   }

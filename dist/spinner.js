@@ -14,7 +14,7 @@ module.exports = Spinner = (function() {
     }
     single_spin_ms = 150;
     index = 0;
-    util.print("" + sequence[index] + " " + msg);
+    util.print(sequence[index] + " " + msg);
     return timer = setInterval((function() {
       util.print(sequence[index].replace(/./g, "\r"));
       index = index < sequence.length - 1 ? index + 1 : 0;

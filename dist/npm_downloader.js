@@ -1,5 +1,5 @@
-var NPM, NpmDownloader, Promise, fs, path, _,
-  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var NPM, NpmDownloader, Promise, _, fs, path,
+  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 fs = require('fs');
 
@@ -16,8 +16,8 @@ module.exports = NpmDownloader = (function() {
     this.dist = dist;
     this.modules = modules;
     this.emit = emit;
-    this.missing = __bind(this.missing, this);
-    this.downloadAll = __bind(this.downloadAll, this);
+    this.missing = bind(this.missing, this);
+    this.downloadAll = bind(this.downloadAll, this);
   }
 
   NpmDownloader.prototype.downloadAll = function() {
