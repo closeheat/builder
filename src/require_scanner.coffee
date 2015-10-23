@@ -30,7 +30,7 @@ class RequireScanner
           return
 
         ast = acorn.parse_dammit(file.contents.toString())
-        walk = require('acorn/util/walk')
+        walk = require('acorn/dist/walk')
         walkall = require('walkall')
 
         walk.simple(ast, walkall.makeVisitors((node) =>
