@@ -38,12 +38,10 @@
     "machinepack-npm": "^5.1.0",
     "marked": "^0.3.5",
     "node-module-concat": "^1.1.1",
-    "request": "^2.65.0",
     "through2": "^2.0.0",
     "tmp": "0.0.28",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "vinyl-transform": "^1.0.0",
     "walkall": "^0.0.5"
   },
   "keywords": [
