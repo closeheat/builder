@@ -58,7 +58,7 @@ module.exports = RequireScanner = (function() {
               return;
             }
             module_name = node["arguments"][0].value;
-            if (!module_name.match(/^[a-zA-Z]/)) {
+            if (!(module_name != null ? module_name.match(/^[a-zA-Z]/) : void 0)) {
               return;
             }
             ref = module_name.split('/'), module = ref[0], submodules = 2 <= ref.length ? slice.call(ref, 1) : [];

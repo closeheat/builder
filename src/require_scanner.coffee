@@ -38,7 +38,7 @@ class RequireScanner
           return unless node.callee.name == 'require'
 
           module_name = node.arguments[0].value
-          return unless module_name.match(/^[a-zA-Z]/)
+          return unless module_name?.match(/^[a-zA-Z]/)
 
           [module, submodules...] = module_name.split('/')
           [name, version] = module.split('@')
