@@ -4,6 +4,7 @@ Promise = require 'bluebird'
 dirmr = require 'dirmr'
 fs = require 'fs.extra'
 _ = require 'lodash'
+plumber = require('gulp-plumber')
 
 Requirer = require './requirer'
 
@@ -96,10 +97,11 @@ class Core
     new Promise (resolve, reject) =>
       gulp
         .src(path.join(@src, '/**/*.scss'))
-        .pipe(sass().on('error', reject))
-        .pipe(gulp.dest(path.join(@tmp_app)))
-        .on('error', reject)
+        .pipe(plumber())
+        .pipe(sass())
+        .on('error', resolve)
         .on('end', resolve)
+        .pipe(gulp.dest(path.join(@tmp_app)))
 
   buildMd: ->
     return @donePromise() unless @execExtension('md')

@@ -32,7 +32,7 @@
     "gulp-jade": "^1.1.0",
     "gulp-markdown": "^1.1.0",
     "gulp-reactify": "^3.0.1",
-    "gulp-sass": "^2.0.4",
+    "gulp-sass": "^2.1.0",
     "gulp-sourcemaps": "^1.6.0",
     "lodash": "^3.10.1",
     "machinepack-npm": "^5.1.0",
@@ -42,6 +42,7 @@
     "tmp": "0.0.28",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
+    "gulp-plumber": "^1.0.1",
     "walkall": "^0.0.5"
   },
   "keywords": [

@@ -1,4 +1,4 @@
-var Core, Promise, Requirer, _, dirmr, fs, gulp, path,
+var Core, Promise, Requirer, _, dirmr, fs, gulp, path, plumber,
   bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 gulp = require('gulp');
@@ -12,6 +12,8 @@ dirmr = require('dirmr');
 fs = require('fs.extra');
 
 _ = require('lodash');
+
+plumber = require('gulp-plumber');
 
 Requirer = require('./requirer');
 
@@ -132,7 +134,7 @@ module.exports = Core = (function() {
     sass = require('gulp-sass');
     return new Promise((function(_this) {
       return function(resolve, reject) {
-        return gulp.src(path.join(_this.src, '/**/*.scss')).pipe(sass().on('error', reject)).pipe(gulp.dest(path.join(_this.tmp_app))).on('error', reject).on('end', resolve);
+        return gulp.src(path.join(_this.src, '/**/*.scss')).pipe(plumber()).pipe(sass()).on('error', resolve).on('end', resolve).pipe(gulp.dest(path.join(_this.tmp_app)));
       };
     })(this));
   };
