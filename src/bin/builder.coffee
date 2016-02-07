@@ -1,4 +1,3 @@
-require 'cache-require-paths'
 program = require 'commander'
 pkg = require '../../package.json'
 

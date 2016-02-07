@@ -34,7 +34,6 @@ class Bundler
         entries: [file.path]
         debug: true
         standalone: 'CloseheatStandaloneModule'
-        cacheFile: path.join(@tmp, 'browserify-cache.json')
       ).bundle().on('error', reject)
 
       relative = path.relative(@tmp_app, file.path)

@@ -51,8 +51,7 @@ module.exports = Bundler = (function() {
         bundle = browserifyInc({
           entries: [file.path],
           debug: true,
-          standalone: 'CloseheatStandaloneModule',
-          cacheFile: path.join(_this.tmp, 'browserify-cache.json')
+          standalone: 'CloseheatStandaloneModule'
         }).bundle().on('error', reject);
         relative = path.relative(_this.tmp_app, file.path);
         return bundle.pipe(source(relative)).pipe(buffer()).pipe(sourcemaps.init({
