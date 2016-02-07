@@ -1,6 +1,6 @@
 {
   "name": "closeheat-builder",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "author": "Justas Palumickas <jpalumickas@gmail.com>",
   "contributors": [
     "Domas Bitvinskas <domas.bitvinskas@me.com>"
@@ -17,7 +17,7 @@
     "url": "git://github.com/closeheat/builder.git"
   },
   "dependencies": {
-    "acorn": "^2.4.0",
+    "acorn": "2.7.0",
     "bluebird": "^2.10.0",
     "browserify": "11.2.0",
     "browserify-incremental": "^3.0.1",

@@ -46,7 +46,7 @@ module.exports = RequireScanner = (function() {
             cb(null, file);
             return;
           }
-          ast = acorn.parse_dammit(file.contents.toString());
+          ast = acorn.parse_dammit(file.contents.toString(), {});
           walk = require('acorn/dist/walk');
           walkall = require('walkall');
           walk.simple(ast, walkall.makeVisitors(function(node) {
